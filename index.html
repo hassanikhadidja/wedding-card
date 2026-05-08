@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6f0;
+    --rose: #c9787e;
+    --rose-light: #e8b4b8;
+    --rose-pale: #f5dde0;
+    --dusty: #d4a0a4;
+    --gold: #c9a87c;
+    --text-dark: #5a3a3a;
+    --text-mid: #7a5555;
+    --text-light: #a07070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ===================== FULLSCREEN INTRO VIDEO ===================== */
+  #envelope-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: -webkit-fill-available;
+    overflow: hidden;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  #envelope-cover.open {
+    opacity: 0;
+    transform: translateY(-60px);
+    pointer-events: none;
+  }
+
+  #intro-video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  /* Phones: true edge-to-edge fullscreen */
+  @media (max-width: 768px) {
+    #intro-video {
+      object-fit: cover;
+    }
+  }
+
+  .intro-play-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+    z-index: 2;
+    pointer-events: none;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 245, 245, 0.92);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    animation: blink-hint 2.2s ease-in-out infinite;
+  }
+
+  #envelope-cover.is-playing .intro-play-hint {
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  @keyframes blink-hint {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+
+  /* ===================== MAIN INVITATION ===================== */
+  #invitation {
+    min-height: 100vh;
+    opacity: 0;
+    transform: none;
+    transition: none;
+  }
+
+  #invitation.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* HERO — page1 video */
+  .hero {
+    position: relative;
+    background: #0f0a0a;
+    text-align: center;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .hero-video-wrap {
+    position: relative;
+    width: 100%;
+    line-height: 0;
+  }
+
+  .hero-page1-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: min(88vh, 920px);
+    margin: 0 auto;
+    object-fit: contain;
+    object-position: center top;
+    background: #000;
+  }
+
+  .hero-view-details-btn {
+    position: absolute;
+    left: 50%;
+    bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px));
+    transform: translateX(-50%);
+    z-index: 2;
+    max-width: calc(100% - 24px);
+    padding: 10px 50px;
+    background: linear-gradient(135deg, #b85c64, #c97a82);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: none;
+    line-height: 1.3;
+    white-space: nowrap;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(192, 104, 112, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .hero-view-details-btn:hover {
+    transform: translateX(-50%) translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(192, 104, 112, 0.5);
+  }
+
+  .hero-view-details-btn:focus-visible {
+    outline: 2px solid var(--rose-light);
+    outline-offset: 3px;
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .hero-view-details-btn {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+    }
+  }
+
+  /* PC / laptop */
+  @media (min-width: 1025px) {
+    .hero-view-details-btn {
+      padding: 20px 50px;
+      font-size: 0.95rem;
+    }
+  }
+
+  /* ===================== COUNTDOWN SECTION ===================== */
+  .section {
+    padding: 50px 24px;
+    text-align: center;
+    position: relative;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .section-title-icon {
+    width: 1.2em;
+    height: 1.2em;
+    object-fit: contain;
+    vertical-align: -0.15em;
+    margin-right: 0.35em;
+  }
+
+  #countdown-section.countdown-section-bg {
+    min-height: 100vh;
+    background-color: #111;
+    background-image: url('pages/page3.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .countdown-overlay {
+    width: min(420px, 88vw);
+    padding: 0;
+  }
+
+  .section-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 32px;
+    letter-spacing: 0.05em;
+  }
+
+  .countdown {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .count-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .count-num {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--rose);
+    line-height: 1;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .count-sep {
+    font-size: 1.35rem;
+    color: var(--rose-light);
+    margin-top: -3px;
+    align-self: flex-start;
+    padding-top: 4px;
+  }
+
+  .count-label {
+    font-size: 0.64rem;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+
+  .floral-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 40px 20px 10px;
+  }
+
+  .floral-divider::before, .floral-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose-light));
+  }
+
+  .floral-divider::after {
+    background: linear-gradient(90deg, var(--rose-light), transparent);
+  }
+
+  /* ===================== SCHEDULE ===================== */
+  .schedule-section-bg {
+    min-height: 100vh;
+    background-color: #111;
+    background-image: url('pages/page4.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 0;
+  }
+
+  .schedule-items {
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .schedule-item {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rose-pale);
+    text-align: right;
+  }
+
+  .schedule-item:last-child {
+    border-bottom: none;
+  }
+
+  .schedule-time {
+    min-width: 70px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    order: 2;
+  }
+
+  .schedule-time .time-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--rose);
+    font-weight: 600;
+  }
+
+  .schedule-time .time-period {
+    font-size: 0.7rem;
+    color: var(--text-light);
+  }
+
+  .schedule-content {
+    flex: 1;
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .schedule-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 700;
+  }
+
+  .schedule-place {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .schedule-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--rose-light);
+    margin-top: 8px;
+    order: 3;
+    flex-shrink: 0;
+  }
+
+  /* ===================== DRESS CODE ===================== */
+  .dress-section-bg {
+    min-height: 100vh;
+    background-color: #111;
+    background-image: url('pages/page5.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 0;
+  }
+
+  .color-swatches {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.7);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+
+  .swatch-label {
+    font-size: 0.72rem;
+    color: var(--text-light);
+  }
+
+  /* ===================== MAP SECTION ===================== */
+  .map-section {
+    background: white;
+    padding: 44px 24px 60px;
+    text-align: center;
+  }
+
+  .map-container {
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 420px;
+    margin: 24px auto 0;
+    box-shadow: 0 6px 28px rgba(180,100,110,0.15);
+    height: 260px;
+  }
+
+  .map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .location-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 24px;
+    border: 1px solid var(--rose-light);
+    border-radius: 50px;
+    color: var(--rose);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .location-link:hover {
+    background: var(--rose-pale);
+  }
+
+  /* ===================== FOOTER ===================== */
+  .footer {
+    background: var(--text-dark);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .footer .couple-footer {
+    font-family: 'Scheherazade New', serif;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  /* ===================== RSVP SECTION ===================== */
+  .rsvp-section-bg {
+    min-height: 100vh;
+    background-color: #111;
+    background-image: url('pages/page6.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .rsvp-cta-wrap {
+    width: 100%;
+    text-align: center;
+    padding: 20px 16px max(30px, calc(env(safe-area-inset-bottom, 0px) + 14px));
+    transform: translateY(-1in);
+  }
+
+  .rsvp-cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #c86b85, #df90a6);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 14px 34px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    box-shadow: 0 6px 18px rgba(74, 30, 42, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .rsvp-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(74, 30, 42, 0.36);
+  }
+
+  .rsvp-cta-btn:focus-visible {
+    outline: 3px solid rgba(255, 220, 232, 0.95);
+    outline-offset: 3px;
+  }
+
+  .rsvp-cards {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .rsvp-card {
+    border: 1.5px solid var(--rose-light);
+    border-radius: 14px;
+    padding: 20px 24px;
+    flex: 1;
+    min-width: 140px;
+    max-width: 160px;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    background: white;
+  }
+
+  .rsvp-card:hover, .rsvp-card.selected {
+    background: var(--rose-pale);
+    transform: translateY(-2px);
+  }
+
+  .rsvp-card.selected {
+    border-color: var(--rose);
+  }
+
+  .rsvp-card .rsvp-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .rsvp-card .rsvp-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+  }
+
+  /* Floral decorations SVG */
+  .section-floral {
+    margin: 20px auto 0;
+    display: block;
+    width: min(300px, 80vw);
+  }
+
+  /* scroll reveal */
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- =========== FULLSCREEN INTRO VIDEO =========== -->
+<div
+  id="envelope-cover"
+  role="button"
+  tabindex="0"
+  aria-label="Tap to play opening video"
+  title="افتح الدعوة">
+  <video id="intro-video" playsinline preload="auto">
+    <source src="https://res.cloudinary.com/dbtkfjrvd/video/upload/f_mp4/v1778185920/copy_50C739B0-7514-43C0-A929-C07FEC6FCC2A_r0n2qn.mp4" type="video/mp4">
+    <source src="https://res.cloudinary.com/dbtkfjrvd/video/upload/v1778185920/copy_50C739B0-7514-43C0-A929-C07FEC6FCC2A_r0n2qn.mov" type="video/quicktime">
+  </video>
+  <div class="intro-play-hint" id="intro-play-hint">Tap to begin</div>
+</div>
+
+<!-- =========== FULL INVITATION =========== -->
+<div id="invitation">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-video-wrap reveal">
+      <video
+        id="hero-page1-video"
+        class="hero-page1-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-label="Wedding invitation hero video">
+        <source id="hero-page-video-source" src="pages/page1.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="hero-view-details-btn" onclick="document.getElementById('countdown-section').scrollIntoView({behavior:'smooth'})" aria-label="View details, go to countdown section">
+        View details
+      </button>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="section reveal countdown-section-bg" id="countdown-section">
+    <div class="countdown-overlay">
+      <div class="countdown">
+        <div class="count-item">
+          <div class="count-num" id="cd-days">00</div>
+          <div class="count-label">Days</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-item">
+          <div class="count-num" id="cd-hours">00</div>
+          <div class="count-label">Hours</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-item">
+          <div class="count-num" id="cd-mins">00</div>
+          <div class="count-label">Minutes</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-item">
+          <div class="count-num" id="cd-secs">00</div>
+          <div class="count-label">Seconds</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="section reveal schedule-section-bg"></div>
+
+  <!-- DRESS CODE -->
+  <div class="section reveal dress-section-bg"></div>
+
+  <!-- RSVP -->
+  <div class="section reveal rsvp-section-bg">
+    <div class="rsvp-cta-wrap">
+      <a
+        class="rsvp-cta-btn"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSdwMCYVsLs3b5F_G8HY912hXFs4rosNOxMM7bayMYE_-DdZvg/viewform?usp=publish-editor"
+        target="_blank"
+        rel="noopener noreferrer">
+        Will You Celebrate With Us?
+      </a>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-section reveal">
+    <p class="section-title">📍 Venue</p>
+    <p class="section-subtitle">Grand Rosewood Ballroom, London</p>
+    <div class="map-container">
+      <iframe
+        src="https://maps.google.com/maps?q=51.5074,-0.1278&z=14&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+        title="موقع القاعة">
+      </iframe>
+    </div>
+    <a class="location-link" href="https://maps.google.com/?q=51.5074,-0.1278" target="_blank">
+      📍 &nbsp; Open in Google Maps
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="couple-footer">William &amp; Charlotte</div>
+    <div>29 November 2025 · Grand Rosewood Ballroom, London</div>
+    <div style="margin-top:8px; font-size:0.78rem; opacity:0.5;">♥ &nbsp; A Day We Will Never Forget &nbsp; ♥</div>
+  </div>
+
+</div><!-- end #invitation -->
+
+<audio id="bg-music" loop preload="auto">
+  <source src="https://res.cloudinary.com/dbtkfjrvd/video/upload/v1778196115/Ethereal_-_Txmy_The_Arabic_VersionRendition_cazqzz.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  let introVideoStarted = false;
+  let backgroundMusicStarted = false;
+
+  function startBackgroundMusic() {
+    if (backgroundMusicStarted) return;
+    const bgMusic = document.getElementById('bg-music');
+    if (!bgMusic) return;
+
+    bgMusic.volume = 1;
+    const tryPlay = function () {
+      return bgMusic.play().then(function () {
+        backgroundMusicStarted = true;
+      });
+    };
+
+    tryPlay().catch(function () {
+      const unlock = function () {
+        tryPlay().catch(function () {});
+        document.removeEventListener('click', unlock);
+        document.removeEventListener('touchstart', unlock);
+        document.removeEventListener('keydown', unlock);
+      };
+      document.addEventListener('click', unlock, { once: true });
+      document.addEventListener('touchstart', unlock, { once: true });
+      document.addEventListener('keydown', unlock, { once: true });
+    });
+  }
+
+  (function heroPageVideoResponsive() {
+    var mq = window.matchMedia('(min-width: 768px)');
+    var lastHeroSrc = '';
+    function prepHeroVideo(v) {
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('autoplay', '');
+      v.setAttribute('muted', '');
+      v.setAttribute('loop', '');
+      v.playsInline = true;
+      v.autoplay = true;
+      v.loop = true;
+      v.muted = true;
+      v.defaultMuted = true;
+    }
+    window.syncHeroPageVideo = function () {
+      var v = document.getElementById('hero-page1-video');
+      var s = document.getElementById('hero-page-video-source');
+      if (!v || !s) return;
+      prepHeroVideo(v);
+      var url = mq.matches ? 'pages/page2.mp4' : 'pages/page1.mp4';
+      if (!v.dataset.fallbackBound) {
+        v.dataset.fallbackBound = '1';
+        v.addEventListener('error', function () {
+          if (s.src.indexOf('page1.mp4') === -1) {
+            s.src = 'pages/page1.mp4';
+            lastHeroSrc = 'pages/page1.mp4';
+            v.load();
+            v.play().catch(function () {});
+          }
+        });
+      }
+      if (url === lastHeroSrc) return;
+      lastHeroSrc = url;
+      s.src = url;
+      v.load();
+      v.play().catch(function () {});
+    };
+    if (mq.addEventListener) {
+      mq.addEventListener('change', window.syncHeroPageVideo);
+    } else if (mq.addListener) {
+      mq.addListener(window.syncHeroPageVideo);
+    }
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(window.syncHeroPageVideo, 180);
+    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', window.syncHeroPageVideo);
+    } else {
+      window.syncHeroPageVideo();
+    }
+  })();
+
+  function revealInvitationContent() {
+    const cover = document.getElementById('envelope-cover');
+    cover.classList.add('open');
+    cover.classList.remove('is-playing');
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      document.getElementById('invitation').classList.add('visible');
+      startBackgroundMusic();
+      document.body.style.overflow = 'auto';
+      initReveal();
+      startCountdown();
+      if (typeof window.syncHeroPageVideo === 'function') {
+        window.syncHeroPageVideo();
+      }
+      const heroV = document.getElementById('hero-page1-video');
+      if (heroV) {
+        heroV.play().catch(function () {});
+      }
+    }, 600);
+  }
+
+  function startIntroVideo() {
+    if (introVideoStarted) return;
+    introVideoStarted = true;
+
+    const cover = document.getElementById('envelope-cover');
+    const video = document.getElementById('intro-video');
+
+    const onEnded = function () {
+      video.removeEventListener('ended', onEnded);
+      video.pause();
+      revealInvitationContent();
+    };
+    video.addEventListener('ended', onEnded);
+
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.playsInline = true;
+    video.currentTime = 0;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .catch(function () {
+          video.muted = true;
+          return video.play();
+        })
+        .then(function () {
+          cover.classList.add('is-playing');
+        })
+        .catch(function () {
+          video.removeEventListener('ended', onEnded);
+          introVideoStarted = false;
+          revealInvitationContent();
+        });
+    } else {
+      cover.classList.add('is-playing');
+    }
+  }
+
+  (function bindIntroCover() {
+    const cover = document.getElementById('envelope-cover');
+    cover.addEventListener('click', startIntroVideo);
+    cover.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        startIntroVideo();
+      }
+    });
+  })();
+
+  // ---- Scroll reveal ----
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  // ---- Countdown timer ----
+  function startCountdown() {
+    // Fake looping countdown (not tied to real date/time)
+    const startValue = (8 * 86400) + (14 * 3600) + (37 * 60) + 52;
+    let fakeTotal = startValue;
+
+    function update() {
+      const days = Math.floor(fakeTotal / 86400);
+      const hours = Math.floor((fakeTotal % 86400) / 3600);
+      const mins = Math.floor((fakeTotal % 3600) / 60);
+      const secs = fakeTotal % 60;
+      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+
+      fakeTotal -= 1;
+      if (fakeTotal < 0) fakeTotal = startValue;
+    }
+    update();
+    setInterval(update, 1000);
+  }
+
+  // ---- RSVP ----
+  function selectRsvp(card, val) {
+    document.querySelectorAll('.rsvp-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const msg = document.getElementById('rsvp-msg');
+    msg.style.opacity = 0;
+    setTimeout(() => {
+      msg.textContent = val === 'yes'
+        ? '🎉 Wonderful! We look forward to celebrating with you!'
+        : '💐 You will be missed — wishing you love from afar.';
+      msg.style.opacity = 1;
+    }, 200);
+  }
+
+  // Prevent scroll until envelope is opened
+  document.body.style.overflow = 'hidden';
+</script>
+</body>
+</html>
